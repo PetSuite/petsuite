@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link ,BrowserRouter as Router,NavLink } from 'react-router-dom'
-import '../App.css'
-import { createBrowserHistory } from 'history';
+import { BrowserRouter as Router,NavLink } from 'react-router-dom'
+import '../styles/App.css'
 
 export default function NavigationBar(props){
     return(

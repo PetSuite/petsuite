@@ -1,19 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import { Register, Login } from './auth'
+import { Switch, Route,Redirect } from 'react-router-dom'
 import { Bookings } from './bookings'
-import { Pets } from './pets'
-import { Users } from './users'
+import { PetRoutes } from './pets'
+import { UserRoutes } from './users'
 import { Settings } from './settings'
-
+import PageNotFound from './PageNotFound'
 
 function PageRoute() {
   return (
       <Switch>
-        <Route path="/bookings" exact component={Bookings} />
-        <Route path="/pets" exact component={Pets} />
-        <Route path="/users" exact component={Users} />
-        <Route path="/settings" exact component={Settings} />
+        <Route path="/bookings" component={Bookings} />
+        <Route path="/pets" component={PetRoutes} />
+        <Route path="/users" component={UserRoutes} />
+        <Route path="/settings" component={Settings} />
+        <Redirect exact from="/" to="/users"/>
+        <Route component={PageNotFound} />
       </Switch>
   );
 }

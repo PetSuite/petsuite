@@ -1,7 +1,6 @@
 import React,{useState} from 'react'
-import './dashboard.css'
+import '../styles/dashboard.css'
 import useGlobal from '../hooks'
-import store from 'store'
 
 export default function User(){
 
