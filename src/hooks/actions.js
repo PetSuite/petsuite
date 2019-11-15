@@ -3,11 +3,13 @@ import storage from 'store'
 import { API_URL } from '../config'
 import { Users } from '../pages/users';
 import { createBrowserHistory } from 'history';
+import { readdirSync } from 'fs';
+import { transformFromAstSync } from '@babel/core';
 const history = createBrowserHistory();
 
 async function sendRequest(method= 'GET', url= '', data = {}, headers){
- try{
     console.log(data)
+ try{
     const res = await fetch(API_URL + url, {
     method,
     body: (method === 'GET') ? null : JSON.stringify(data),
@@ -22,6 +24,8 @@ async function sendRequest(method= 'GET', url= '', data = {}, headers){
     return { status : false}
  }
 }
+
+
 
 
 const actions = {
@@ -67,19 +71,56 @@ const actions = {
         const res = await sendRequest('POST','users', {...user, id: storage.get('user').id}, header)
         return res
     },
-    fetchUsers: async (store,user) =>{
+    usersList: async (store,page) =>{
         const header = {
             'Authorization' : `Bearer ${store.state.token}`
         }
-        const res = await sendRequest('GET','users',{},header)
-        // console.log(res)
+        const res = await sendRequest('GET',`users?page=${page}`,{},header)
         return res
     },
     userFetch: async (store,id) =>{
         const header = {
             'Authorization' : `Bearer ${store.state.token}`,
         }
-        const res = await sendRequest('GET',`users?id=${id}`,{},header)
+        const res = await sendRequest('GET',`users/${id}`,{},header)
+        console.log(res)
+        return res
+    },
+    searchOwner: async (store,key) =>{
+        const header = {
+            'Authorization' : `Bearer ${store.state.token}`
+        }
+        const res = await sendRequest('GET',`owner?key=${key}`, {}, header)
+        if (res.status){
+            return res.owners
+        }
+        else {
+            alert('eror backend')
+            return console.error('error backend')
+        }
+    },
+    addPet: async (store,pet) => {
+        const header = {
+            'Authorization' : `Bearer ${store.state.token}`
+        }
+        const {name,breed,size,owner} = pet
+        const res = await sendRequest('POST', 'pets',{name,breed,size, owner: {_id:owner._id} }, header)
+        console.log(res)
+        return res
+    },
+    petsList: async (store,id) =>{
+        const header = {
+            'Authorization' : `Bearer ${store.state.token}`,
+        }
+        const res = await sendRequest('GET',`pets`,{}, header)
+        console.log(res)
+        return res
+    },
+    petFetch : async (store,id) =>{
+        const header = {
+            'Authorization' : `Bearer ${store.state.token}`,
+        }
+        const res = await sendRequest('GET',`pets/${id}`,{},header)
         console.log(res)
         return res
     }

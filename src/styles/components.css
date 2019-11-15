@@ -1,7 +1,10 @@
 #autocomplete-result{
-    width: 100%;
+    position: absolute;
+    width: inherit;
     max-height: 150px;
     overflow-y: auto;
+    z-index: 99;
+    background-color: white;
 }
 #autocomplete-result::-webkit-scrollbar {
     -webkit-appearance: none;

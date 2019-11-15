@@ -1,7 +1,8 @@
 import React,{ useState,useEffect } from 'react'
-import { Breadcrumb,Button } from '../../components'
+import { Breadcrumb,Button,Pagination } from '../../components'
 import { Link } from 'react-router-dom'
 import useGlobal from '../../hooks/'
+import { SlowBuffer } from 'buffer'
 
 export default function Users({ match }){
     
@@ -14,17 +15,19 @@ export default function Users({ match }){
 
     const [state,actions] = useGlobal()
     const [users,setUsers] = useState([])
-
-    async function fetchUsers(){
-        const data = await actions.fetchUsers()
-        setUsers(data.users)
-    }
+    const [page,setPage] = useState('')
 
     useEffect(()=>{
         fetchUsers()
     },[])
-    console.log(users)
     
+    async function fetchUsers(page=1){
+        const data = await actions.usersList(page)
+        console.log(data)
+        setUsers(data.users)
+        setPage(data.page)
+    }
+
     return(
         <div>
             <Breadcrumb data={[ {path: '/', label: 'Home'},{path: '/users', label: 'Users'} ] } />
@@ -51,7 +54,7 @@ export default function Users({ match }){
                             users.map((item,index)=>{
                                 return(
                                     <tr key={index}>
-                                        <td>{index+1}</td>
+                                        <td>{JSON.stringify(((parseInt(page.page)*10)+index+1)-10)}</td>
                                         <td>{item.email}</td>
                                         <td>{item.firstname}</td>
                                         <td>{item.role}</td>
@@ -64,26 +67,10 @@ export default function Users({ match }){
                                 )
                             })
                         }
-                        {/* <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        </tr>
-                        <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        </tr>
-                        <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                        </tr> */}
                     </tbody>
+                    {/* 09169472856 */}
                 </table>
+                <Pagination fetch={fetchUsers} pages={page} />
             </div>
         </div>
     )

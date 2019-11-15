@@ -11,7 +11,7 @@ export default function UserForm({match,history}){
         phoneNumber: '',
         password: '',
         confirmPassword: '',
-        roles: [],
+        roles: '',
     }   
     
     const [user,setUser] = useState(initialState)
@@ -25,7 +25,7 @@ export default function UserForm({match,history}){
         console.log('render')
         async function userFetch(id){
             const { user } = await actions.userFetch(id)
-            setUser({ email: user.email, firstName: user.firstname, lastName: user.lastname, roles: [user.role] })
+            setUser({ email: user.email, firstName: user.firstname, lastName: user.lastname, roles: user.role })
         }
         // viewing
         if (match.path === '/users/:id'){
@@ -37,20 +37,11 @@ export default function UserForm({match,history}){
             userFetch(match.params.id)
             setStatus('edit')
         }
+      
      
     },[match.url])
 
-    const onChange = (e,value) => {
-        console.log(e.target.checked)
-        if (e.target.checked){
-            setUser({...user, roles: value})
-        }
-        else{
-            let temp = [...user.roles]
-            temp.splice(user.roles.indexOf(value),1)
-            setUser({...user, roles: temp}) 
-        }
-    }
+  
     const save = async() => {
         if (!user.email){
             return setError({ isError: true, msg: 'Please provide an email address.' })
@@ -82,6 +73,7 @@ export default function UserForm({match,history}){
         }
 
     }
+    console.log(user)
     return(
         <div>
             <Breadcrumb data={[ 
@@ -100,74 +92,73 @@ export default function UserForm({match,history}){
                     : '' 
                 }
             </div>
-
-            <div className="form-group" style={{ width: '50%', margin: '0 auto' }}>
                 <form>
-                    {error.msg ? <Alert label={error.msg} color={error.isError ? 'danger' : 'success'} /> : null }
-                    <div className="form-group">
-                        <Input label="Email" name="email" type="email" 
-                                value={user.email}
-                                disabled={status==='view' ? true : false} 
-                                onChange={ 
-                                    (e) => [setUser({...user, email : e.target.value}),
-                                             setError({...error, msg: ''})
-                                            ] 
+                    <div className="form-group" style={{ width: '50%', margin: '0 auto' }}>
+                        {error.msg ? <Alert label={error.msg} color={error.isError ? 'danger' : 'success'} /> : null }
+                        <div className="form-group">
+                            <Input label="Email" name="email" type="text" 
+                                    value={user.email}
+                                    disabled={status==='view' ? true : false} 
+                                    onChange={ 
+                                        (e) => [setUser({...user, email : e.target.value}),
+                                                setError({...error, msg: ''})
+                                                ] 
+                                        } 
+                            />
+                            <Input label="First Name" name="firstName" 
+                                    value={user.firstName} 
+                                    disabled={status==='view' ? true : false} 
+                                    onChange={ 
+                                        (e) => setUser({...user, firstName : e.target.value}) 
+                                        } 
+                            />
+                            <Input label="Last Name" name="lastName" 
+                                    value={user.lastName} 
+                                    disabled={status==='view' ? true : false} 
+                                    onChange={ 
+                                        (e) => setUser({...user, lastName : e.target.value}) 
+                                        } 
+                            />
+                            <Input label="Phone Number" name="phoneNumber" 
+                                    value={user.phoneNumber} 
+                                    disabled={status==='view' ? true : false} 
+                                    onChange={ 
+                                        (e) => setUser({...user, phoneNumber : e.target.value}) 
                                     } 
-                        />
-                        <Input label="First Name" name="firstName" 
-                                value={user.firstName} 
+                            />
+                            <Input label="Roles" type="select" name="roles" value={user.roles} 
+                                choices={["Manager", "Employee", "Pet Owner"]} 
                                 disabled={status==='view' ? true : false} 
-                                onChange={ 
-                                    (e) => setUser({...user, firstName : e.target.value}) 
-                                    } 
-                        />
-                        <Input label="Last Name" name="lastName" 
-                                value={user.lastName} 
-                                disabled={status==='view' ? true : false} 
-                                onChange={ 
-                                    (e) => setUser({...user, lastName : e.target.value}) 
-                                    } 
-                        />
-                        <Input label="Phone Number" name="phoneNumber" 
-                                value={user.phoneNumber} 
-                                disabled={status==='view' ? true : false} 
-                                onChange={ 
-                                    (e) => setUser({...user, phoneNumber : e.target.value}) 
-                                } 
-                        />
-                        <Input label="Roles" type="select" name="roles" value={user.roles} 
-                            choices={["Manager", "Employee", "Pet Owner"]} 
-                            disabled={status==='view' ? true : false} 
-                            onChange={onChange} 
-                            selected={user.roles}
-                        />
-                        {status === 'add' ?
-                            <React.Fragment>
-                                <Input type="password" label="Password" 
-                                value={user.password} 
-                                disabled={status==='view' ? true : false} 
-                                onChange={ 
-                                    (e) => [setUser({...user, password : e.target.value}), 
-                                            setError({...error, msg: ''})
-                                            ] 
-                                            } 
-                                />
-                                <Input type="password" label="Confirm Password" 
-                                        value={user.confirmPassword} 
-                                        disabled={status==='view' ? true : false} 
-                                        onChange={ 
-                                            (e) => [setUser({...user, confirmPassword : e.target.value}), 
-                                                    setError({...error, msg: ''})
-                                                    ] 
+                                onChange={(e) => setUser({...user, roles: e.target.value})} 
+                                selected={user.roles}
+                            />
+                            {status === 'add' ?
+                                <React.Fragment>
+                                    <Input type="password" label="Password" 
+                                    value={user.password} 
+                                    disabled={status==='view' ? true : false} 
+                                    onChange={ 
+                                        (e) => [setUser({...user, password : e.target.value}), 
+                                                setError({...error, msg: ''})
+                                                ] 
                                                 } 
-                                />
-                            </React.Fragment>
-                            : ''
-                        }
+                                    />
+                                    <Input type="password" label="Confirm Password" 
+                                            value={user.confirmPassword} 
+                                            disabled={status==='view' ? true : false} 
+                                            onChange={ 
+                                                (e) => [setUser({...user, confirmPassword : e.target.value}), 
+                                                        setError({...error, msg: ''})
+                                                        ] 
+                                                    } 
+                                    />
+                                </React.Fragment>
+                                : ''
+                            }
+                        </div>
                     </div>
                 </form>
                 {status !== 'view' ? <Button color="success" label="Save" onClick={ save } /> : '' }
-            </div>
         </div>
     )
 }
