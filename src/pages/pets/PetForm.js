@@ -90,17 +90,10 @@ export default function Petform({match}){
                 <form>
                 {error.msg ? <Alert label={error.msg} color={error.isError ? 'danger' : 'success'} /> : null }
                     <div className="form-group" style={{ width: '400px', margin: '0 auto' }}>
-                            <Input label="Pet Owner" name="petOwner" type="autoComplete"
-                                    choices={ownerList} 
-                                    onChange={ownerOnChange}
+                            <Input label="Pet Owner" type="autoComplete"
+                                    actions={actions.searchOwner}
                                     onSelect = {ownerSelectHandle}
                                     value={pet.owner}
-                                    // value={user.email}
-                                    // onChange={ 
-                                    //     (e) => [setUser({...user, email : e.target.value}),
-                                    //                 setError({...error, msg: ''})
-                                    //             ] 
-                                    //     } 
                             />
   
                         <Input label="Name" 

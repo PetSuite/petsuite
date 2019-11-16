@@ -1,19 +1,24 @@
 import React,{ useState,useEffect } from 'react'
 import '../styles/components.css'
+import useGlobal from '../hooks'
 
-const Input = ({type="text", disabled, label, value='', onChange, choices, selected,onSelect}) => {
+
+const Input = ({type="text", value='',disabled, label, onChange, choices, selected,onSelect,min,max,params_id='',actions}) => {
     const [isActive,setIsActive] = useState(false)
     const [inputVal,setInputVal] = useState('')
-    
-    const autoCompleteOnChange = (e) => {
-        if (value._id){
+    const [selectList,setSelectList] = useState([])
+
+    const autoCompleteOnChange = async(e) => {
+        const val = e.target.value
+        if (value){
             setInputVal('')
-            
+            onSelect('')
         }
         else{
-            setInputVal(e.target.value)
+                const data = await actions(val,params_id)
+                setSelectList(data)
+                setInputVal(val)
         }
-        onChange(e)
     }
     
     const autoCompleteOnBlur = (e) => {
@@ -30,23 +35,26 @@ const Input = ({type="text", disabled, label, value='', onChange, choices, selec
         return(
             <React.Fragment>
                 <label>{label}</label>
-                <input onChange={(e) => autoCompleteOnChange(e)} onFocus={() => setIsActive(true)} 
+                <input onChange={ (e) => autoCompleteOnChange(e) } onFocus={() => setIsActive(true)} 
                         onBlur={ (e) =>  autoCompleteOnBlur(e) }
                         disabled={disabled} type="text"
-                        value={ value ? `${value.firstname} ${value.lastname} < ${value.email} > ` : inputVal} 
+                        value={value ? Object.entries(value)[1][1] : inputVal} 
                         className="form-control" />
                 {isActive && !value._id ?
                 <div id="autocomplete-result" className="border-right border-left border-bottom">
-                  {!choices ?
+                  {!selectList ?
                     <ul>
                         <li className="border-bottom">No result found.</li>
                     </ul>
                     :
                     <ul>
-                        {choices.map((item,index)=>{
-                        return(
-                            <li key={index} className="border-bottom" onClick={() => onSelect(item)}>{item.firstname} {item.lastname} | {item.email} |</li>
-                        )
+                        {selectList.map((item,index)=>{
+                        // for (const [key, value] of Object.entries(item)) {
+                            const val = Object.entries(item)[1][1]
+                            return(
+                                <li key={index} className="border-bottom" onClick={() => onSelect(item)}>{val}</li>
+                            )
+                        //   }
                         })}
                     </ul>}
                 </div>
@@ -85,11 +93,21 @@ const Input = ({type="text", disabled, label, value='', onChange, choices, selec
             </div>
         )
     }
+    else if (type==='textarea'){
+
+        return (
+            <React.Fragment>
+                <label>{label}</label>
+                <textarea className="form-control" rows="3" value={value} disabled={disabled} onChange={onChange}></textarea>
+                <br />
+            </React.Fragment>
+        )
+    }
     else{
         return (
             <React.Fragment>
                 <label>{label}</label>
-                <input disabled={disabled} type="select"  onChange={onChange} value={value} className="form-control" />
+                <input min={min} max={max} disabled={disabled} type={type}  onChange={onChange} value={value} className="form-control " />
                 <br />
             </React.Fragment>
         )

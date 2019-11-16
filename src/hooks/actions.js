@@ -90,13 +90,33 @@ const actions = {
         const header = {
             'Authorization' : `Bearer ${store.state.token}`
         }
-        const res = await sendRequest('GET',`owner?key=${key}`, {}, header)
-        if (res.status){
-            return res.owners
+        // search only once the key is more than 1 letter
+        if (key.length>=1){
+            const res = await sendRequest('GET',`owner?key=${key}`, {}, header)
+            if (res.status){
+                return res.owners
+            }
+            else {
+                alert('eror backend')
+                return console.error('error backend')
+            }
         }
-        else {
-            alert('eror backend')
-            return console.error('error backend')
+    },
+    searchPet: async (store,key,ownerId) =>{
+        console.log(ownerId)
+        const header = {
+            'Authorization' : `Bearer ${store.state.token}`
+        }
+        // search only once the key is more than 1 letter
+        if (key.length>=1){
+            const res = await sendRequest('GET',`pets?owner_id=${ownerId}&key=${key}`, {}, header)
+            if (res.status){
+                return res.owners
+            }
+            else {
+                alert('eror backend')
+                return console.error('error backend')
+            }
         }
     },
     addPet: async (store,pet) => {
@@ -123,9 +143,7 @@ const actions = {
         const res = await sendRequest('GET',`pets/${id}`,{},header)
         console.log(res)
         return res
-    }
-
-
+    },
 
 }
 
