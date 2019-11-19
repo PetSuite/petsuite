@@ -25,7 +25,8 @@ export default function UserForm({match,history}){
         console.log('render')
         async function userFetch(id){
             const { user } = await actions.userFetch(id)
-            setUser({ email: user.email, firstName: user.firstname, lastName: user.lastname, roles: user.role })
+            console.log(user)
+            setUser({ _id: id, email: user.email, firstName: user.firstname, phoneNumber: user.mobile, lastName: user.lastname, roles: user.role })
         }
         // viewing
         if (match.path === '/users/:id'){
@@ -46,26 +47,27 @@ export default function UserForm({match,history}){
         if (!user.email){
             return setError({ isError: true, msg: 'Please provide an email address.' })
         }
-        else if (!user.password){
+        else if (!user.password && status==='add'){
             return setError({ isError: true, msg: `Please enter your password.` })
         }
-        else if (user.password!==user.confirmPassword){
+        else if (user.password!==user.confirmPassword  && status==='add'){
            return setError({ isError: true, msg: `Passwords did'nt match.` })
         }
         else if (user.roles.length===0){
             return setError({ isError: true, msg: 'Please select a role.' })
         }
-        const res = await actions.addUser({
-            email: user.email,
-            firstname: user.firstName,
-            lastname: user.lastName,
-            mobile: user.phoneNumber,
-            role: user.roles,
-            password: user.password
-        })
-        console.log(res)
+        const res =  await actions.addUser({
+                email: user.email,
+                firstname: user.firstName,
+                lastname: user.lastName,
+                mobile: user.phoneNumber,
+                role: user.roles,
+                password: user.password,
+                _id : user._id
+            },status) 
         if (res.status){
-            setError({ isError: false, msg: 'Added successfuly.'})
+            console.log(res)
+            setError({ isError: false, msg: res.message})
         }
         else {
             console.log('request error', res.message)
@@ -73,7 +75,6 @@ export default function UserForm({match,history}){
         }
 
     }
-    console.log(user)
     return(
         <div>
             <Breadcrumb data={[ 

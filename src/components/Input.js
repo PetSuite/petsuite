@@ -105,11 +105,11 @@ const Input = ({type="text", value='',disabled, label, onChange, choices, select
     }
     else{
         return (
-            <React.Fragment>
+            <div id="input">
                 <label>{label}</label>
                 <input min={min} max={max} disabled={disabled} type={type}  onChange={onChange} value={value} className="form-control " />
                 <br />
-            </React.Fragment>
+            </div>
         )
     }
 }

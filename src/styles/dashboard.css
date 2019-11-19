@@ -1,8 +1,10 @@
 .drop-down{
  position: absolute;
+ background-color: #f8f9fa;
  margin-top: 25px;
- box-shadow: 0 2px 8px rgba(0,0,0,0.15);
- padding: 4px 0;
+ /* box-shadow: 0 2px 8px rgba(0,0,0,0.15); */
+ box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+; padding: 4px 0;
  right: 0;
 }
 .drop-down>li{

@@ -23,7 +23,6 @@ export default function Users({ match }){
     
     async function fetchUsers(page=1){
         const data = await actions.usersList(page)
-        console.log(data)
         setUsers(data.users)
         setPage(data.page)
     }

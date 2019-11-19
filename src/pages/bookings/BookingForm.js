@@ -43,6 +43,12 @@ export default function BookingForm({match}){
     const ownerSelectHandle = (owner) =>{
         setBooking({...booking, owner})
     }
+
+    const petSelectHandle = (pet) =>{
+        setBooking({...booking, pet})
+    }
+    console.log(booking)
+
     const save = async() => {
         if (!booking.owner) {
             setError({...error, msg: "Please select pet owner."})
@@ -94,7 +100,7 @@ export default function BookingForm({match}){
                         <Input label="Pet Name" type="autoComplete"
                                 params_id={booking.owner._id}
                                 actions={actions.searchPet}
-                                onSelect = {ownerSelectHandle}
+                                onSelect = {petSelectHandle}
                                 value={booking.pet}
                         />
                         : ''}

@@ -23,7 +23,6 @@ export default function Pets({ match,history }){
 
     async function fetchPets(page=1){
         const data = await actions.petsList(page)
-        console.log(data)
         setPets(data.pets)
         setPage(data.page)
     }

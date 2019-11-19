@@ -12,7 +12,6 @@ export function Login(){
 
     const logIn = async() =>{
         const res = await actions.login(user)
-        console.log(res)
     }
 
     return(

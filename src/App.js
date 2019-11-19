@@ -29,39 +29,35 @@ function App() {
 
   useEffect(() => {
     // store.clearAll()
-    console.log('use  effect user')
     const user = store.get('user')
     if (user){
+      // check if user is logged in
       actions.loggedIn(user,store.get('token'))
     }
 
   },[])
 
-
   // If user is logged in
   if (state.user){
   return (
-    <Switch>
-      <Router>
+      <Route>
           <div className="wrapper">
           {/* <!-- Sidebar --> */}
             <NavigationBar isToggle={isToggle}/>
-          
           {/* Page Content */}
             <div id="content">
               <Header setIsToggle={setIsToggle} isToggle={isToggle} />
               <Route component={PageRoute} />
             </div>
           </div>
-      </Router>
-    </Switch>
+      </Route>
       )
   } 
 else{
     return(
       <div style={{ block: 'block' }} className="row"> 
         <div className="bg" style={{ width: '60%' }}></div>
-        <div className="col-md-4"style={{ width: '40%', padding: '5%'}}>
+        <div className="col-md-4" style={{ width: '40%', padding: '5%'}}>
           <h1>PetSuite</h1> <br/>
           <Login />
         </div>

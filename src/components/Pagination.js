@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Pagination = ({pages, fetch}) =>{
-    console.log(pages)
     const { total,lastPage } = pages
     const page = parseInt(pages.page)
     if (pages){

@@ -9,6 +9,7 @@ const history = createBrowserHistory();
 
 async function sendRequest(method= 'GET', url= '', data = {}, headers){
     console.log(data)
+    console.log(API_URL+url)
  try{
     const res = await fetch(API_URL + url, {
     method,
@@ -29,6 +30,7 @@ async function sendRequest(method= 'GET', url= '', data = {}, headers){
 
 
 const actions = {
+    // check use if logged in
     loggedIn: (store,user,token) =>{
         if (user){
             store.setState({
@@ -64,11 +66,20 @@ const actions = {
         storage.clearAll()
         history.push ('/')
     },
-    addUser: async (store,user) =>{
+    addUser: async (store,user,action) =>{
         const header = {
             'Authorization' : `Bearer ${store.state.token}`
         }
-        const res = await sendRequest('POST','users', {...user, id: storage.get('user').id}, header)
+        console.log(action)
+        let res = ''
+        if (action==='add'){
+            console.log('adddd')
+            res = await sendRequest('POST','users', {...user}, header)
+        }
+        else if (action==='edit'){
+            console.log('edittttt')
+            res = await sendRequest('PUT',`users/${user._id}`, {...user}, header)
+        }
         return res
     },
     usersList: async (store,page) =>{
@@ -109,9 +120,10 @@ const actions = {
         }
         // search only once the key is more than 1 letter
         if (key.length>=1){
-            const res = await sendRequest('GET',`pets?owner_id=${ownerId}&key=${key}`, {}, header)
+            const res = await sendRequest('GET',`pets/search?owner_id=${ownerId}&key=${key}`, {}, header)
+            console.log(res)
             if (res.status){
-                return res.owners
+                return res.pets
             }
             else {
                 alert('eror backend')
@@ -128,11 +140,11 @@ const actions = {
         console.log(res)
         return res
     },
-    petsList: async (store,id) =>{
+    petsList: async (store,page) =>{
         const header = {
             'Authorization' : `Bearer ${store.state.token}`,
         }
-        const res = await sendRequest('GET',`pets`,{}, header)
+        const res = await sendRequest('GET',`pets?page=${page}`,{}, header)
         console.log(res)
         return res
     },
