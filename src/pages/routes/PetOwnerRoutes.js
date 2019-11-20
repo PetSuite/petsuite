@@ -6,7 +6,8 @@ import PageNotFound from '../PageNotFound'
 
 export const PetOwnerRoutes = () => (
         <Switch>
-            <Route exact path='/pets' component={PetRoutes} />
-            <Route exact path='/bookings' component={BookingRoutes} />
+        {console.log('pet owner routes')}
+            <Route path='/pets' component={PetRoutes} />
+            <Route path='/bookings' component={BookingRoutes} />
         </Switch>
    )

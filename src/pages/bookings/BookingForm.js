@@ -3,7 +3,7 @@ import { Breadcrumb,Input,Button,Alert } from '../../components'
 import { Link } from 'react-router-dom'
 import useGlobal from '../../hooks'
 
-export default function BookingForm({match}){
+export default function BookingForm({match,history}){
 
     const initialState={
         owner : '',

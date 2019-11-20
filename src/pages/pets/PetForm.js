@@ -3,7 +3,7 @@ import { Breadcrumb,Input,Button,Alert } from '../../components'
 import { Link } from 'react-router-dom'
 import useGlobal from '../../hooks'
 
-export default function Petform({match}){
+export default function Petform({match,history}){
 
     const initialState={
         owner : '',
@@ -20,9 +20,13 @@ export default function Petform({match}){
 
     useEffect(() =>{
         async function petFetch(id){
-            const { pet } = await actions.petFetch(id)
-            console.log(pet)
-            setPet(pet)
+            const res = await actions.petFetch(id)
+            if (!res.status) {
+                history.push(`${match.url}/404`)
+            }
+            else{
+                setPet(res.pet)
+            }
         }
         console.log(match)
         // viewing

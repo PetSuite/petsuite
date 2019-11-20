@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route,Redirect,Switch } from 'react-router-dom'
+import { BookingRoutes } from './bookings/index'
 import { EmployeeRoutes, ManagerRoutes, PetOwnerRoutes } from './routes'
-import PageNotFound from './PageNotFound'
 import useGlobal from '../hooks'
 
 
@@ -10,7 +10,7 @@ function PageRoute() {
   console.log(state.user.role)
 
   return (
-      <Switch>
+      <Route>
         {/* <Route path="/bookings" component={BookingRoutes} />
         <Route path="/pets" component={PetRoutes} />
         <Route path="/users" component={UserRoutes} />
@@ -20,7 +20,7 @@ function PageRoute() {
         {state.user.role==='Employee' && <EmployeeRoutes />}
         {state.user.role==='Manager' && <ManagerRoutes />}
         {/* <Redirect exact from="/" to="/bookings"/> */}
-      </Switch>
+      </Route>
   );
 }
 export default PageRoute;

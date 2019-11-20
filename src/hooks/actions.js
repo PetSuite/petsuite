@@ -66,18 +66,17 @@ const actions = {
         storage.clearAll()
         history.push ('/')
     },
-    addUser: async (store,user,action) =>{
+    addUser: async (store,user) =>{
         const header = {
             'Authorization' : `Bearer ${store.state.token}`
         }
-        console.log(action)
         let res = ''
-        if (action==='add'){
-            console.log('adddd')
+        // adding
+        if (!user._id){
             res = await sendRequest('POST','users', {...user}, header)
         }
-        else if (action==='edit'){
-            console.log('edittttt')
+        // update
+        else{
             res = await sendRequest('PUT',`users/${user._id}`, {...user}, header)
         }
         return res
@@ -153,7 +152,6 @@ const actions = {
             'Authorization' : `Bearer ${store.state.token}`,
         }
         const res = await sendRequest('GET',`pets/${id}`,{},header)
-        console.log(res)
         return res
     },
 

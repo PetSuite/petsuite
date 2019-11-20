@@ -1,6 +1,8 @@
 import React from 'react'
 import { Switch,Route,Redirect } from 'react-router-dom'
 import { BookingForm,Bookings } from './index'
+import PageNotFound from '../PageNotFound'
+
 
 export default function BookingRoutes({match}){
     return (
@@ -9,7 +11,7 @@ export default function BookingRoutes({match}){
             <Route exact path={`${match.url}/new`} component={BookingForm} />
             <Route exact path={`${match.url}/:id`} component={BookingForm} />
             <Route exact path={`${match.url}/:editId/edit`} component={BookingForm} />
-            {/* <Route path="/404" component={PageNotFound} /> */}
+            <Route path="/404" component={PageNotFound} />
             <Redirect to={`${match.url}`} />
         </Switch>
     )
