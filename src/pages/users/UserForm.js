@@ -8,10 +8,9 @@ export default function UserForm({match,history}){
         email: '',
         firstName: '',
         lastName: '',
-        phoneNumber: '',
         password: '',
         confirmPassword: '',
-        roles: '',
+        role: '',
     }   
     
     const [user,setUser] = useState(initialState)
@@ -26,7 +25,7 @@ export default function UserForm({match,history}){
         async function userFetch(id){
             const { user } = await actions.userFetch(id)
             console.log(user)
-            setUser({ _id: id, email: user.email, firstName: user.firstname, phoneNumber: user.mobile, lastName: user.lastname, roles: user.role })
+            setUser(user)
         }
         // viewing
         if (match.path === '/users/:id'){
@@ -53,25 +52,17 @@ export default function UserForm({match,history}){
         else if (user.password!==user.confirmPassword  && status==='add'){
            return setError({ isError: true, msg: `Passwords did'nt match.` })
         }
-        else if (user.roles.length===0){
+        else if (user.role.length===0){
             return setError({ isError: true, msg: 'Please select a role.' })
         }
-        const res =  await actions.addUser({
-                email: user.email,
-                firstname: user.firstName,
-                lastname: user.lastName,
-                mobile: user.phoneNumber,
-                role: user.roles,
-                password: user.password,
-                _id : user._id
-            },status) 
+        const res =  await actions.addUser(user,status) 
         if (res.status){
             console.log(res)
-            setError({ isError: false, msg: res.message})
+            setError({ isError: false, msg: res.msg})
         }
         else {
-            console.log('request error', res.message)
-            setError({ isError: true, msg: res.message })
+            console.log('request error', res.msg)
+            setError({ isError: true, msg: res.msg })
         }
 
     }
@@ -83,18 +74,10 @@ export default function UserForm({match,history}){
                     {path : '', label: match.url.includes('new') ? 'Add User' : !match.url.includes('edit') ? 'View' : 'Edit' } 
                 ]} 
             />
-            <h1>Add User</h1>
+            {status==='edit' ? <h1>Update User</h1> : status==='add' ? <h1>Add User</h1> : ''}
             {/* nav buttons */}
-            <div>
-                { !match.url.includes('edit') && !match.url.includes('new') ? 
-                 <Link to={`${match.url}/edit`}>
-                    <Button color="primary" label="Edit"/>
-                </Link>
-                    : '' 
-                }
-            </div>
-                <form>
-                    <div className="form-group" style={{ width: '50%', margin: '0 auto' }}>
+                    <div className="col-xs-12 col-sm-9 col-md-6 col-lg-5" style={{ margin: '0 auto' }}>
+                        <form>
                         {error.msg ? <Alert label={error.msg} color={error.isError ? 'danger' : 'success'} /> : null }
                         <div className="form-group">
                             <Input label="Email" name="email" type="text" 
@@ -120,18 +103,12 @@ export default function UserForm({match,history}){
                                         (e) => setUser({...user, lastName : e.target.value}) 
                                         } 
                             />
-                            <Input label="Phone Number" name="phoneNumber" 
-                                    value={user.phoneNumber} 
-                                    disabled={status==='view' ? true : false} 
-                                    onChange={ 
-                                        (e) => setUser({...user, phoneNumber : e.target.value}) 
-                                    } 
-                            />
-                            <Input label="Roles" type="select" name="roles" value={user.roles} 
+                         
+                            <Input label="Role" type="select" name="roles" value={user.roles} 
                                 choices={["Manager", "Employee", "Pet Owner"]} 
                                 disabled={status==='view' ? true : false} 
-                                onChange={(e) => setUser({...user, roles: e.target.value})} 
-                                selected={user.roles}
+                                onChange={(e) => setUser({...user, role: e.target.value})} 
+                                selected={user.role}
                             />
                             {status === 'add' ?
                                 <React.Fragment>
@@ -156,10 +133,16 @@ export default function UserForm({match,history}){
                                 </React.Fragment>
                                 : ''
                             }
-                        </div>
-                    </div>
-                </form>
+                            </div>
+                        </form>
                 {status !== 'view' ? <Button color="success" label="Save" onClick={ save } /> : '' }
+                { !match.url.includes('edit') && !match.url.includes('new') ? 
+                <Link to={`${match.url}/edit`}>
+                    <Button color="primary" label="Edit"/>
+                </Link>
+                    : '' 
+                }
+                </div>
         </div>
     )
 }

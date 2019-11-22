@@ -7,9 +7,10 @@ import { SettingsRoutes } from '../settings'
 
 export const ManagerRoutes = () => (
     <Route>
-        <Route exact path='/pets' component={PetRoutes} />
-        <Route exact path='/users' component= {UserRoutes} />
-        <Route exact path='/bookings' component={BookingRoutes} />
-        <Route exact path='/settings' component={SettingsRoutes} />
+        {console.log('s')}
+        <Route path='/pets' component={PetRoutes} />
+        <Route path='/users' component= {UserRoutes} />
+        <Route path='/bookings' component={BookingRoutes} />
+        <Route path='/settings' component={SettingsRoutes} />
     </Route>
 )

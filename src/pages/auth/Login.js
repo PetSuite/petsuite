@@ -11,7 +11,7 @@ export function Login(){
     const [state,actions] = useGlobal()
 
     const logIn = async() =>{
-        const res = await actions.login(user)
+        await actions.login(user)
     }
 
     return(
@@ -24,7 +24,7 @@ export function Login(){
                     </div>
                     <div className="form-group">
                         <label htmlFor="exampleInputPassword1">Password</label>
-                        <input value={user.password} onChange={ (e)=> setUser({...user, email: e.target.value }) } type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
+                        <input value={user.password} onChange={ (e)=> setUser({...user, password: e.target.value }) } type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
                         <small className="form-text text-muted">
                             Sign in as: &nbsp;
                             <b onClick={ () => setUser({ password: 'petsuite', email: 'manager@petsuite.com'})}><u style={styles.account}>Manager</u></b>, &nbsp;

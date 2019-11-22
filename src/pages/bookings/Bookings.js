@@ -2,7 +2,7 @@
 import React,{ useState,useEffect } from 'react'
 import { Breadcrumb,Button,Pagination } from '../../components'
 import { Link } from 'react-router-dom'
-import useGlobal from '../../hooks/'
+import useGlobal from '../../hooks'
 
 export default function Bookings({ match,history }){
     const styles= {

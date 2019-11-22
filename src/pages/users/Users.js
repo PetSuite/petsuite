@@ -1,8 +1,7 @@
 import React,{ useState,useEffect } from 'react'
 import { Breadcrumb,Button,Pagination } from '../../components'
 import { Link } from 'react-router-dom'
-import useGlobal from '../../hooks/'
-import { SlowBuffer } from 'buffer'
+import useGlobal from '../../hooks'
 
 export default function Users({ match }){
     
@@ -31,13 +30,13 @@ export default function Users({ match }){
         <div>
             <Breadcrumb data={[ {path: '/', label: 'Home'},{path: '/users', label: 'Users'} ] } />
             <h1>Users</h1>
-            <div style={{ padding: '20px' }}>
+            <div>
                 <Link to="/users/new">
                     <Button label="ADD NEW" color="primary" />
                 </Link>
             </div>
             {/* List */}
-            <div>
+            <div className="table-responsive">
                 <table className="table">
                     <thead>
                         <tr>
@@ -55,7 +54,7 @@ export default function Users({ match }){
                                     <tr key={index}>
                                         <td>{JSON.stringify(((parseInt(page.page)*10)+index+1)-10)}</td>
                                         <td>{item.email}</td>
-                                        <td>{item.firstname}</td>
+                                        <td>{item.firstName}</td>
                                         <td>{item.role}</td>
                                         <td>
                                             <Link to={`${match.url}/${item._id}`}><span style={styles.action} className="badge badge-pill badge-success">View</span></Link>

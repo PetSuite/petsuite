@@ -5,6 +5,7 @@ import { PageNotFound } from '../../pages'
 
 const UserRouter = ({ match }) => (
         <Switch>
+            {console.log('sd')}
             <Route exact path={`${match.url}/`} component={Users} />
             <Route exact path={`${match.url}/new`} component={UserForm} />
             <Route exact path={`${match.url}/:id`} component={UserForm} />

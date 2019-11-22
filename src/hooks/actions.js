@@ -1,15 +1,10 @@
 import React from 'react'
 import storage from 'store'
 import { API_URL } from '../config'
-import { Users } from '../pages/users';
 import { createBrowserHistory } from 'history';
-import { readdirSync } from 'fs';
-import { transformFromAstSync } from '@babel/core';
 const history = createBrowserHistory();
 
 async function sendRequest(method= 'GET', url= '', data = {}, headers){
-    console.log(data)
-    console.log(API_URL+url)
  try{
     const res = await fetch(API_URL + url, {
     method,
@@ -66,18 +61,20 @@ const actions = {
         storage.clearAll()
         history.push ('/')
     },
+    // add and update user
     addUser: async (store,user) =>{
         const header = {
-            'Authorization' : `Bearer ${store.state.token}`
+            'token' : store.state.token
         }
         let res = ''
         // adding
+        console.log(user)
         if (!user._id){
-            res = await sendRequest('POST','users', {...user}, header)
+            res = await sendRequest('POST','users', {user}, header)
         }
         // update
         else{
-            res = await sendRequest('PUT',`users/${user._id}`, {...user}, header)
+            res = await sendRequest('PUT',`users/${user._id}`, {user}, header)
         }
         return res
     },
@@ -89,11 +86,7 @@ const actions = {
         return res
     },
     userFetch: async (store,id) =>{
-        const header = {
-            'Authorization' : `Bearer ${store.state.token}`,
-        }
-        const res = await sendRequest('GET',`users/${id}`,{},header)
-        console.log(res)
+        const res = await sendRequest('GET',`users/${id}`,{}, {})
         return res
     },
     searchOwner: async (store,key) =>{
@@ -134,7 +127,7 @@ const actions = {
         const header = {
             'Authorization' : `Bearer ${store.state.token}`
         }
-        const {name,breed,size,owner} = pet
+        const { name,breed,size,owner,type } = pet
         const res = await sendRequest('POST', 'pets',{name,breed,size, owner: {_id:owner._id} }, header)
         console.log(res)
         return res

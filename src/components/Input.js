@@ -1,6 +1,5 @@
 import React,{ useState,useEffect } from 'react'
 import '../styles/components.css'
-import useGlobal from '../hooks'
 
 
 const Input = ({type="text", value='',disabled, label, onChange, choices, selected,onSelect,min,max,params_id='',actions}) => {
@@ -68,7 +67,7 @@ const Input = ({type="text", value='',disabled, label, onChange, choices, select
             <div>
                 {/* <h5>{label}</h5> */}
                     <label htmlFor="sel1">{label}</label>
-                    <select className="form-control" onChange={onChange} value={selected}>
+                    <select className="form-control" onChange={onChange} value={selected} disabled={disabled}>
                     [{!selected ? <option  value=''></option> : ''},
                        {choices.map((item, index)=>{
                            return(
